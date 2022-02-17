@@ -1,0 +1,11 @@
+{
+  "name": "typescript-compiler-api-intro",
+  "version": "1.0.0",
+  "description": "a sample of typescript compiler API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yasunori Horikoshi",
+  "license": "MIT"
+}
