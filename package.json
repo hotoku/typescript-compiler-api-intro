@@ -4,6 +4,7 @@
   "description": "a sample of typescript compiler API",
   "main": "index.js",
   "scripts": {
+    "run": "ts-node src/main.ts",
     "build": "webpack --config webpack.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

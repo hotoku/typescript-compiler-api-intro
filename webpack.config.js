@@ -16,7 +16,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "feature.js",
+    filename: "index.js",
     library: "feature",
     libraryTarget: "var",
   },
