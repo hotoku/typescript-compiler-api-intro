@@ -9,6 +9,7 @@
   "author": "Yasunori Horikoshi",
   "license": "MIT",
   "devDependencies": {
+    "ts-node": "^10.5.0",
     "typescript": "^4.5.5"
   }
 }
