@@ -14,37 +14,41 @@ const indent = (n: number, cum: string): string => {
   return indent(n - 1, cum + "    ");
 };
 
-const dfs = (
-  obj: IIndexable,
-  name: string,
-  set: Set<object>,
-  depth: number
-) => {
-  const output = `${name}: ${typeof obj}`;
-  set.add(obj);
-  switch (typeof obj) {
-    case "number":
-    case "string":
-    case "undefined":
-    case "boolean":
-      console.log(indent(depth, "") + `${output} = ${obj}`);
-      break;
-    case "function":
-      console.log(indent(depth, "") + `${output}`);
-      break;
-    default:
-      console.log(indent(depth, "") + `${output}`);
-      for (let n in obj) {
-        const child = obj[n];
-        if (!set.has(child)) {
-          dfs(child, n, set, depth + 1);
+const findFunction = (source: ts.SourceFile, name: string) => {
+  const route = {
+    SourceFile: (node: ts.SourceFile) => {
+      const st = node.statements;
+      for (let ch of st) {
+        switch (ch.kind) {
+          case ts.SyntaxKind.VariableStatement:
+            route.VariableStatement(ch as ts.VariableStatement);
+            break;
         }
       }
-  }
+    },
+    VariableStatement: (node: ts.VariableStatement) => {
+      const dlist = node.declarationList.declarations;
+      for (let ch of dlist) {
+        switch (ch.kind) {
+          case ts.SyntaxKind.VariableDeclaration:
+            route.VariableDeclaration(ch as ts.VariableDeclaration);
+            break;
+        }
+      }
+    },
+    VariableDeclaration: (node: ts.VariableDeclaration) => {
+      const name = node.name;
+      switch (name.kind) {
+        case ts.SyntaxKind.Identifier:
+          route.Identifier(name as ts.Identifier);
+      }
+    },
+    Identifier: (node: ts.Identifier) => {
+      const name = node.escapedText;
+      console.log(`name=${name}`);
+    },
+  };
+  route.SourceFile(source);
 };
 
-for (let i in source.statements) {
-  const set = new Set<object>();
-  const root = source.statements[i];
-  dfs(root, `statements[${i}]`, set, 0);
-}
+findFunction(source, "a");
